@@ -1,0 +1,1336 @@
+<methodFactory>
+
+	
+
+	<!-- Query -->
+
+	<methodDeclaration name="QueryByIdMethodGenerator">
+		<returnType>${baseRecordType}</returnType>
+		<statementId>query${domainObjectName}ByID</statementId>
+		<paramType name="id" type="java.lang.Long"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryByIdMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		${domainObjectName} records = ${javaMapperName}.selectByPrimaryKey(id, getSecurityKey());
+		#else
+		${domainObjectName} records = ${javaMapperName}.selectByPrimaryKey(id);
+		#end
+		return records;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="QueryByIdMethodGeneratorRPC">
+		<returnType>Object</returnType>
+		<statementId>query${domainObjectName}</statementId>
+		<paramType name="id" type="java.lang.Long">
+			<annotation>
+				@RequestParam(name = &quot;id &quot;)
+			</annotation>
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryByIdMethodGeneratorRPC">
+		<methodDiv>
+			Assert.notNull(id, &quot;id can't empty&quot;);
+			${domainObjectShortType} obj = this.${serviceInterfaceName}.query${domainObjectName}ByID(id);
+			if(obj == null){
+				return null;
+			}
+			${voObjectShortType} vo = this.${voAdapterInterfaceName}.transformToVo(obj);
+			return vo;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="QueryByIdMethodGeneratorRPCTest">
+		<returnType>void</returnType>
+		<statementId>testQuery${domainObjectName}</statementId>
+		<paramType name="id" type="String"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryByIdMethodGeneratorRPCTest">
+		<methodDiv>
+		String url =&quot;${componentUrl}query${domainObjectName}.json&quot; ;
+		</methodDiv>
+		<methodDiv>
+		HttpUnitOptions.setDefaultCharacterSet("UTF-8");
+		WebRequest req = new GetMethodWebRequest(host + url);
+		req.setParameter("id", id);
+		</methodDiv>
+
+		<methodDiv>
+		System.out.println(req.getURL().toString());
+		String result = post(account , req.getURL().toString());
+		System.out.println(result);
+
+		String succ = trimSuccess(result);
+		System.out.println(succ);
+		Assert.assertEquals(succ, "true");
+		</methodDiv>
+	</methodBody>
+
+	<fields name="QueryByIdMethodGeneratorRPCTestFields">
+		<publicField>
+			<fieldName>query${domainObjectName}DataProvider</fieldName>
+			<fieldType>Object[][]</fieldType>
+			<fieldInitStr>new Object[][]{ { &quot;&quot;},}</fieldInitStr>
+			<remark>//TODO 主键ID</remark>
+		</publicField>
+	</fields>
+
+
+
+	<!-- Insert -->
+
+	<methodDeclaration name="insertMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>insert${domainObjectName}</statementId>
+		<paramType name="record" type="${baseRecordType}"></paramType>
+		<paramType name="user" type="java.lang.String"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="insertMethodGenerator">
+		<methodDiv>
+		//TODO 自行添加唯一性或存在性校验
+		setSpecialForCreate(record, user);
+		#if(${isSecurity})
+		record.setSecretKey(this.getSecurityKey());
+		#end
+		int num = ${javaMapperName}.insertSelective(record);
+		return num;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="insertMethodGeneratorRPC">
+		<returnType>Object</returnType>
+		<statementId>insert${domainObjectName}</statementId>
+		<paramType name="record" type="${voObjectType}">
+			<annotation>
+				@JsonParam(value = &quot;record&quot;)
+			</annotation>
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="insertMethodGeneratorRPC">
+		<methodDiv>
+		this.${voAdapterInterfaceName}.validateVO(record);
+		${domainObjectShortType} obj = this.${voAdapterInterfaceName}.transformToDo(record);
+		int num = this.${serviceInterfaceName}.insert${domainObjectName}(obj, loginUser);
+		return num;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="insertMethodGeneratorRPCTest">
+		<returnType>void</returnType>
+		<statementId>testInsert${domainObjectName}</statementId>
+		#foreach($pro in $modelProList)
+		<paramType name="${pro.fieldName}" type="${pro.type}"></paramType>
+		#end
+	</methodDeclaration>
+
+	<methodBody name="insertMethodGeneratorRPCTest">
+		<methodDiv>
+		String url = &quot;${componentUrl}insert${domainObjectName}.json&quot; ;
+		</methodDiv>
+		
+		<methodDiv>
+		${voObjectShortType} vo = new ${voObjectShortType}();
+		#foreach($pro in $modelProList)
+		vo.${pro.setterName}(${pro.fieldName});
+		#end
+
+		JSONObject jo = JSONObject.fromObject(vo);
+		String record = jo.toString();
+		</methodDiv>
+
+		<methodDiv>
+		HttpUnitOptions.setDefaultCharacterSet("UTF-8");
+		WebRequest req = new GetMethodWebRequest(host + url);
+		req.setParameter("record", record);
+		</methodDiv>
+
+		<methodDiv>
+		System.out.println(req.getURL().toString());
+		String result = post(account , req.getURL().toString());
+		System.out.println(result);
+
+		String succ = trimSuccess(result);
+		System.out.println(succ);
+		Assert.assertEquals(succ, "true");
+		</methodDiv>
+	</methodBody>
+
+	<fields name="insertMethodGeneratorRPCTestFields">
+		<publicField>
+			<fieldName>insert${domainObjectName}DataProvider</fieldName>
+			<fieldType>Object[][]</fieldType>
+			<fieldInitStr>new Object[][]{
+				{ #foreach($pro in $modelProList) "", #end },
+				}
+			</fieldInitStr>
+			<remark>//TODO #foreach($pro in $modelProList) ${pro.remark}, #end
+			</remark>
+		</publicField>
+	</fields>
+
+	<!-- Modify -->
+
+	<methodDeclaration name="modifyMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>modify${domainObjectName}</statementId>
+		<paramType name="record" type="${baseRecordType}"></paramType>
+		<paramType name="user" type="java.lang.String"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="modifyMethodGenerator">
+		<methodDiv>
+		//TODO 自行添加唯一性或存在性校验
+		setSpecailForUpdate(record, user);
+		#if(${isSecurity})
+		record.setSecretKey(this.getSecurityKey());
+		#end
+		int num = ${javaMapperName}.updateByPrimaryKeySelective(record);
+		return num;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="modifyMethodGeneratorRPC">
+		<returnType>Object</returnType>
+		<statementId>modify${domainObjectName}</statementId>
+		<paramType name="record" type="${voObjectType}">
+			<annotation>
+				@JsonParam(value = &quot;record&quot;)
+			</annotation>
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="modifyMethodGeneratorRPC">
+		<methodDiv>
+		Assert.notNull(record.getId(), &quot;id can't empty&quot;);
+		this.${voAdapterInterfaceName}.validateVO(record);
+		${domainObjectShortType} obj = this.${voAdapterInterfaceName}.transformToDo(record);
+		int num = this.${serviceInterfaceName}.modify${domainObjectName}(obj, loginUser);
+		return num;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="modifyMethodGeneratorRPCTest">
+		<returnType>void</returnType>
+		<statementId>testModify${domainObjectName}</statementId>
+		<paramType name="id" type="Long"></paramType>
+		#foreach($pro in $modelProList)
+		<paramType name="${pro.fieldName}" type="${pro.type}"></paramType>
+		#end
+	</methodDeclaration>
+
+	<methodBody name="modifyMethodGeneratorRPCTest">
+		<methodDiv>
+		String url = &quot;${componentUrl}modify${domainObjectName}.json&quot; ;
+		</methodDiv>
+
+		<methodDiv>
+		${voObjectShortType} vo = new ${voObjectShortType}();
+		vo.setId(id);
+		#foreach($pro in $modelProList)
+		vo.${pro.setterName}(${pro.fieldName});
+		#end
+
+		JSONObject jo = JSONObject.fromObject(vo);
+		String record = jo.toString();
+		</methodDiv>
+
+		<methodDiv>
+		HttpUnitOptions.setDefaultCharacterSet("UTF-8");
+		WebRequest req = new GetMethodWebRequest(host + url);
+		req.setParameter("record", record);
+		</methodDiv>
+
+		<methodDiv>
+		System.out.println(req.getURL().toString());
+		String result = post(account , req.getURL().toString());
+		System.out.println(result);
+
+		String succ = trimSuccess(result);
+		System.out.println(succ);
+		Assert.assertEquals(succ, "true");
+		</methodDiv>
+	</methodBody>
+
+	<fields name="modifyMethodGeneratorRPCTestFields">
+		<publicField>
+			<fieldName>modify${domainObjectName}DataProvider</fieldName>
+			<fieldType>Object[][]</fieldType>
+			<fieldInitStr>new Object[][]{
+				{ "", #foreach($pro in $modelProList) "", #end },
+				}
+			</fieldInitStr>
+			<remark>//TODO 主键ID, #foreach($pro in $modelProList) ${pro.remark}, #end
+			</remark>
+		</publicField>
+	</fields>
+
+	<!-- Delete -->
+
+	<methodDeclaration name="deleteMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>delete${domainObjectName}</statementId>
+		<paramType name="id" type="java.lang.Long"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="deleteMethodGenerator">
+		<methodDiv>
+		int num = ${javaMapperName}.deleteByPrimaryKey(id);
+		return num;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="deleteMethodGeneratorRPC">
+		<returnType>Object</returnType>
+		<statementId>delete${domainObjectName}</statementId>
+		<paramType name="id" type="Long">
+			<annotation>
+				@RequestParam(name = &quot;id &quot;)
+			</annotation>
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="deleteMethodGeneratorRPC">
+		<methodDiv>
+		Assert.notNull(id, &quot;id can't empty&quot;);
+		int num = this.${serviceInterfaceName}.delete${domainObjectName}(id);
+		return num;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="deleteMethodGeneratorRPCTest">
+		<returnType>void</returnType>
+		<statementId>testDelete${domainObjectName}</statementId>
+		<paramType name="id" type="String"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="deleteMethodGeneratorRPCTest">
+		<methodDiv>
+		String url = &quot;${componentUrl}delete${domainObjectName}.json&quot; ;
+		</methodDiv>
+
+		<methodDiv>
+		HttpUnitOptions.setDefaultCharacterSet("UTF-8");
+		WebRequest req = new GetMethodWebRequest(host + url);
+		req.setParameter("id", id);
+		</methodDiv>
+
+		<methodDiv>
+		System.out.println(req.getURL().toString());
+		String result = post(account , req.getURL().toString());
+		System.out.println(result);
+
+		String succ = trimSuccess(result);
+		System.out.println(succ);
+		Assert.assertEquals(succ, "true");
+		</methodDiv>
+	</methodBody>
+
+	<fields name="deleteMethodGeneratorRPCTestFields">
+		<publicField>
+			<fieldName>delete${domainObjectName}DataProvider</fieldName>
+			<fieldType>Object[][]</fieldType>
+			<fieldInitStr>new Object[][]{
+				{""},
+				}
+			</fieldInitStr>
+			<remark>//TODO 主键ID</remark>
+		</publicField>
+	</fields>
+
+	<!-- Batch Insert -->
+
+	<methodDeclaration name="batchInsertMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>batchInsert${domainObjectName}</statementId>
+		<paramType name="records" type="java.util.List&lt; ${baseRecordType} &gt;">
+
+		</paramType>
+		<paramType name="user" type="java.lang.String"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="batchInsertMethodGenerator">
+		<methodDiv>
+		//TODO 自行添加唯一性或存在性校验
+		int total = 0;
+		List&lt; List&lt; ${domainObjectName}&gt; &gt; subList = splitList(records);
+		for(List&lt;${domainObjectName} &gt; sub : subList){
+			
+			for(${domainObjectName} obj : sub){
+				setSpecialForCreate(obj, user);
+				#if(${isSecurity})
+				obj.setSecretKey(this.getSecurityKey());
+				#end
+			}
+			int num = ${javaMapperName}.batchInsert(sub);
+			total += num;
+		}
+		return total;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="batchInsertMethodGeneratorRPC">
+		<returnType>Object</returnType>
+		<statementId>batchInsert${domainObjectName}</statementId>
+		<paramType name="records" type="java.util.List&lt; ${voObjectType} &gt;">
+			<annotation>
+				@JsonParam(value = &quot;records&quot;)
+			</annotation>
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="batchInsertMethodGeneratorRPC">
+		<methodDiv>
+		Assert.notNull(records, &quot;records can't null&quot;);
+		this.${voAdapterInterfaceName}.validateVoList(records);
+		List&lt;${domainObjectShortType}&gt; doList = this.${voAdapterInterfaceName}.transformToDoList(records);
+		int num = this.${serviceInterfaceName}.batchInsert${domainObjectName}(doList,loginUser);
+		return num;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="batchInsertMethodGeneratorRPCTest">
+		<returnType>void</returnType>
+		<statementId>testBatchInsert${domainObjectName}</statementId>
+		#foreach($pro in $modelProList)
+		<paramType name="${pro.fieldName}" type="${pro.type}"></paramType>
+		#end
+	</methodDeclaration>
+
+	<methodBody name="batchInsertMethodGeneratorRPCTest">
+		<methodDiv>
+		String url = &quot;${componentUrl}batchInsert${domainObjectName}.json&quot;;
+		</methodDiv>
+
+		<methodDiv>
+		${voObjectShortType} vo = new ${voObjectShortType}();
+		#foreach($pro in $modelProList)
+		vo.${pro.setterName}(${pro.fieldName});
+		#end
+
+		List&lt;${voObjectShortType}&gt; records = new ArrayList&lt;${voObjectShortType}&gt;();
+		records.add(vo);
+		records.add(vo);
+
+		JSONArray jo = JSONArray.fromObject(records);
+		</methodDiv>
+
+		<methodDiv>
+		HttpUnitOptions.setDefaultCharacterSet("UTF-8");
+		WebRequest req = new GetMethodWebRequest(host + url);
+		req.setParameter("records", jo.toString());
+		</methodDiv>
+
+		<methodDiv>
+		System.out.println(req.getURL().toString());
+		String result = post(account , req.getURL().toString());
+		System.out.println(result);
+
+		String succ = trimSuccess(result);
+		System.out.println(succ);
+		Assert.assertEquals(succ, "true");
+		</methodDiv>
+	</methodBody>
+
+	<fields name="batchInsertMethodGeneratorRPCTestFields">
+		<publicField>
+			<fieldName>batchInsert${domainObjectName}DataProvider</fieldName>
+			<fieldType>Object[][]</fieldType>
+			<fieldInitStr>new Object[][]{
+				{ #foreach($pro in $modelProList) "", #end },
+				}
+			</fieldInitStr>
+			<remark>//TODO #foreach($pro in $modelProList) ${pro.remark}, #end
+			</remark>
+		</publicField>
+	</fields>
+
+	<!-- Batch Modify -->
+
+	<methodDeclaration name="batchModifyMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>batchModify${domainObjectName}</statementId>
+		<paramType name="records" type="java.util.List&lt; ${baseRecordType} &gt;">
+		</paramType>
+		<paramType name="user" type="java.lang.String"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="batchModifyMethodGenerator">
+		<methodDiv>
+		//TODO 自行添加唯一性或存在性校验
+		int total = 0;
+		List&lt; List&lt; ${domainObjectName}&gt; &gt; subList = splitList(records);
+		for(List&lt;${domainObjectName} &gt; sub : subList){
+			for(${domainObjectName} obj : sub){
+				setSpecailForUpdate(obj, user);
+				#if(${isSecurity})
+				obj.setSecretKey(this.getSecurityKey());
+				#end
+			}
+			int num = ${javaMapperName}.batchUpdateByPrimaryKey(sub);
+			total += num;
+		}
+		return total;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="batchModifyMethodGeneratorRPC">
+		<returnType>Object</returnType>
+		<statementId>batchModify${domainObjectName}</statementId>
+		<paramType name="records" type="java.util.List&lt; ${voObjectType} &gt;">
+			<annotation>
+				@JsonParam(value = &quot;records&quot;)
+			</annotation>
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="batchModifyMethodGeneratorRPC">
+		<methodDiv>
+		Assert.notNull(records, &quot;records can't null&quot;);
+		this.${voAdapterInterfaceName}.validateVoList(records);
+		List&lt;${domainObjectShortType}&gt; doList = this.${voAdapterInterfaceName}.transformToDoList(records);
+		int num = this.${serviceInterfaceName}.batchModify${domainObjectName}(doList,loginUser);
+		return num;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="batchModifyMethodGeneratorRPCTest">
+		<returnType>void</returnType>
+		<statementId>testBatchModify${domainObjectName}</statementId>
+		<paramType name="id1" type="Long"></paramType>
+		<paramType name="id2" type="Long"></paramType>
+		#foreach($pro in $modelProList)
+		<paramType name="${pro.fieldName}" type="${pro.type}"></paramType>
+		#end
+	</methodDeclaration>
+
+	<methodBody name="batchModifyMethodGeneratorRPCTest">
+		<methodDiv>
+		String url = &quot;${componentUrl}batchModify${domainObjectName}.json&quot; ;
+		</methodDiv>
+
+		<methodDiv>
+		${voObjectShortType} vo = new ${voObjectShortType}();
+		${voObjectShortType} vo2 = new ${voObjectShortType}();
+		#foreach($pro in $modelProList)
+		vo.${pro.setterName}(${pro.fieldName});
+		vo2.${pro.setterName}(${pro.fieldName});
+		#end
+
+		List&lt;${voObjectShortType}&gt; records = new ArrayList&lt;${voObjectShortType}&gt;();
+		vo.setId(id1);
+		records.add(vo);
+		vo2.setId(id2);
+		records.add(vo2);
+
+		JSONArray jo = JSONArray.fromObject(records);
+		</methodDiv>
+
+		<methodDiv>
+		HttpUnitOptions.setDefaultCharacterSet("UTF-8");
+		WebRequest req = new GetMethodWebRequest(host + url);
+		req.setParameter("records", jo.toString());
+		</methodDiv>
+
+		<methodDiv>
+		System.out.println(req.getURL().toString());
+		String result = post(account , req.getURL().toString());
+		System.out.println(result);
+
+		String succ = trimSuccess(result);
+		System.out.println(succ);
+		Assert.assertEquals(succ, "true");
+		</methodDiv>
+	</methodBody>
+
+	<fields name="batchModifyMethodGeneratorRPCTestFields">
+		<publicField>
+			<fieldName>batchModify${domainObjectName}DataProvider</fieldName>
+			<fieldType>Object[][]</fieldType>
+			<fieldInitStr>new Object[][]{
+				{ "", "", #foreach($pro in $modelProList) "", #end },
+				}
+			</fieldInitStr>
+			<remark>//TODO 主键ID1,主键ID2, #foreach($pro in $modelProList)
+				${pro.remark}, #end
+			</remark>
+		</publicField>
+	</fields>
+
+	<!-- BatchDelete -->
+
+	<methodDeclaration name="batchDeleteMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>batchDelete${domainObjectName}</statementId>
+		<paramType name="ids" type="java.util.List&lt; java.lang.Long &gt;">
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="batchDeleteMethodGenerator">
+		<methodDiv>
+		int total = 0;
+		List&lt; List&lt; Long &gt; &gt; subList = splitList(ids);
+		for(List&lt;Long &gt; sub : subList){
+			int num = ${javaMapperName}.batchDeleteByPrimaryKey(sub);
+			total += num;
+		}
+		return total;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="batchDeleteMethodGeneratorRPC">
+		<returnType>Object</returnType>
+		<statementId>batchDelete${domainObjectName}</statementId>
+		<paramType name="ids" type="java.util.List&lt; java.lang.Long &gt;">
+			<annotation>
+				@JsonParam(value = &quot;ids&quot;)
+			</annotation>
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="batchDeleteMethodGeneratorRPC">
+		<methodDiv>
+		Assert.notNull(ids, &quot;ids can't null&quot;);
+		int num = this.${serviceInterfaceName}.batchDelete${domainObjectName}(ids);
+		return num;
+		</methodDiv>
+	</methodBody>
+
+
+	<methodDeclaration name="batchDeleteMethodGeneratorRPCTest">
+		<returnType>void</returnType>
+		<statementId>testBatchDelete${domainObjectName}</statementId>
+		<paramType name="id1" type="String"></paramType>
+		<paramType name="id2" type="String"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="batchDeleteMethodGeneratorRPCTest">
+		<methodDiv>
+		String url = &quot;${componentUrl}batchDelete${domainObjectName}.json&quot; ;
+		</methodDiv>
+
+		<methodDiv>
+		List&lt;String&gt; idList = new ArrayList&lt;String&gt;();
+		idList.add(id1);
+		idList.add(id2);
+		JSONArray jo = JSONArray.fromObject(idList);
+
+		HttpUnitOptions.setDefaultCharacterSet("UTF-8");
+		WebRequest req = new GetMethodWebRequest(host + url);
+		req.setParameter("ids", jo.toString());
+		</methodDiv>
+
+		<methodDiv>
+		System.out.println(req.getURL().toString());
+		String result = post(account , req.getURL().toString());
+		System.out.println(result);
+
+		String succ = trimSuccess(result);
+		System.out.println(succ);
+		Assert.assertEquals(succ, "true");
+		</methodDiv>
+	</methodBody>
+
+	<fields name="batchDeleteMethodGeneratorRPCTestFields">
+		<publicField>
+			<fieldName>batchDelete${domainObjectName}DataProvider</fieldName>
+			<fieldType>Object[][]</fieldType>
+			<fieldInitStr>new Object[][]{
+				{"",""},
+				}
+			</fieldInitStr>
+			<remark>//TODO 主键ID1，主键ID2 </remark>
+		</publicField>
+	</fields>
+	
+	
+	<methodDeclaration name="selectAllMethodGenerator">
+		<returnType>List&lt; ${baseRecordType} &gt;</returnType>
+		<statementId>selectAll</statementId>
+	</methodDeclaration>
+
+	<methodBody name="selectAllMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		List&lt;${domainObjectShortType}&gt; dtoPage =  ${javaMapperName}.selectAll(getSecurityKey());
+		#else
+		List&lt;${domainObjectShortType}&gt; dtoPage =  ${javaMapperName}.selectAll();
+		#end
+		return dtoPage;
+		</methodDiv>
+	</methodBody>
+
+	<!-- QueryByCondition -->
+
+	<methodDeclaration name="QueryByConditionMethodGenerator">
+		<returnType>Page&lt; ${baseRecordType} &gt;</returnType>
+		<statementId>query${domainObjectName}ByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+		<paramType name="pageNo" type="Integer"></paramType>
+		<paramType name="pageSize" type="Integer"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryByConditionMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		condition.setSecretKey(this.getSecurityKey());
+		#end
+		PageHelper.startPage(pageNo, pageSize,true);
+		Page&lt;${domainObjectShortType}&gt; dtoPage = (Page&lt;${domainObjectShortType}&gt;)${javaMapperName}.selectByCondition(condition);
+		return dtoPage;
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="QueryByConditionMethodGeneratorRPC">
+		<returnType>Object</returnType>
+		<statementId>query${domainObjectName}ByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}">
+			<annotation>
+				@JsonParam(value = &quot;condition&quot;)
+			</annotation>
+		</paramType>
+		<paramType name="currentPage" type="Integer">
+			<annotation>
+				@RequestParam(name=&quot;currentPage&quot;,defaultValue=&quot;1&quot;)
+			</annotation>
+		</paramType>
+		<paramType name="pageSize" type="Integer">
+			<annotation>
+				@RequestParam(name= &quot;pageSize&quot;,defaultValue=&quot;10&quot;)
+			</annotation>
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryByConditionMethodGeneratorRPC">
+		<methodDiv>
+		Page&lt;${domainObjectShortType}&gt; page =this.${serviceInterfaceName}.query${domainObjectName}ByCondition(condition,currentPage, pageSize);
+		List&lt;${voObjectShortType}&gt; voList = this.${voAdapterInterfaceName}.transformToVoList(page.getResult());
+		</methodDiv>
+
+		<methodDiv>
+
+		return ReturnSchema.build(voList, currentPage, page.getTotal());
+		</methodDiv>
+	</methodBody>
+
+	<methodDeclaration name="QueryByConditionMethodGeneratorRPCTest">
+		<returnType>void</returnType>
+		<statementId>testQuery${domainObjectName}ByCondition</statementId>
+		#foreach($pro in $modelProList)
+		<paramType name="${pro.fieldName}" type="${pro.type}"></paramType>
+		#end
+		#foreach($pro in $condProList)
+		<paramType name="${pro.fieldName}" type="String"></paramType>
+		#end
+	</methodDeclaration>
+
+	<methodBody name="QueryByConditionMethodGeneratorRPCTest">
+		<methodDiv>
+		String url =&quot;${componentUrl}query${domainObjectName}ByCondition.json&quot; ;
+		</methodDiv>
+
+		<methodDiv>
+		${conditionObjectShortType} condition = new ${conditionObjectShortType}();
+		#foreach($pro in $modelProList)
+			condition.${pro.setterName}(${pro.fieldName});
+		#end
+		#foreach($pro in $condProList)
+			//String[] ${pro.fieldName}Arr = ${pro.fieldName}.split(",");
+			//condition.${pro.setterName}(Arrays.asList(${pro.fieldName}Arr));
+        #end
+		JSONObject jo = JSONObject.fromObject(condition);
+		</methodDiv>
+
+		<methodDiv>
+		HttpUnitOptions.setDefaultCharacterSet("UTF-8");
+		WebRequest req = new GetMethodWebRequest(host + url);
+		req.setParameter("condition", jo.toString());
+		</methodDiv>
+
+		<methodDiv>
+		System.out.println(req.getURL().toString());
+		String result = post(account , req.getURL().toString());
+		System.out.println(result);
+
+		String succ = trimSuccess(result);
+		System.out.println(succ);
+		Assert.assertEquals(succ, "true");
+		</methodDiv>
+	</methodBody>
+
+	<fields name="QueryByConditionMethodGeneratorRPCTestFields">
+		<publicField>
+			<fieldName>query${domainObjectName}ByConditionDataProvider</fieldName>
+			<fieldType>Object[][]</fieldType>
+			<fieldInitStr>new Object[][]{
+				{ #foreach($pro in $modelProList) "", #end #foreach($pro in $condProList) "", #end },
+				}
+			</fieldInitStr>
+			<remark>//TODO List用逗号分割 #foreach($pro in $modelProList) ${pro.remark}, #end #foreach($pro in $condProList) ${pro.remark}, #end
+			</remark>
+		</publicField>
+	</fields>
+
+	<methodBody name="returnNull">
+		<methodDiv>
+		return null;
+		</methodDiv>
+	</methodBody>
+
+	<methodBody name="returnZERO">
+		<methodDiv>
+		return 0;
+		</methodDiv>
+	</methodBody>
+
+
+	<!-- transformVo -->
+	<methodDeclaration name="TransformToVoMethodGenerator">
+		<returnType>${voObjectType}</returnType>
+		<statementId>transformToVo</statementId>
+		<paramType name="dobj" type="${baseRecordType}">
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="TransformToVoMethodGenerator">
+		<methodDiv>
+		${voObjectShortType} vo = new ${voObjectShortType}();
+		if(dobj != null){
+			BeanUtils.copyProperties(dobj, vo);
+		}
+		return vo;
+		</methodDiv>
+	</methodBody>
+
+	<!-- transformDo -->
+	<methodDeclaration name="TransformToDoMethodGenerator">
+		<returnType>${baseRecordType}</returnType>
+		<statementId>transformToDo</statementId>
+		<paramType name="vo" type="${voObjectType}">
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="TransformToDoMethodGenerator">
+		<methodDiv>
+		${domainObjectShortType} dobj = new ${domainObjectShortType}();
+		if(vo != null){
+			BeanUtils.copyProperties(vo, dobj);
+		}
+		return dobj;
+		</methodDiv>
+	</methodBody>
+
+	<!-- transformVoList -->
+	<methodDeclaration name="TransformToVoListMethodGenerator">
+		<returnType>List&lt; ${voObjectType} &gt;</returnType>
+		<statementId>transformToVoList</statementId>
+		<paramType name="doList" type="java.util.List&lt; ${baseRecordType} &gt;">
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="TransformToVoListMethodGenerator">
+		<methodDiv>
+		List&lt; ${voObjectShortType} &gt; voList = new ArrayList&lt;${voObjectShortType} &gt;();
+		if(doList != null){
+			for(${domainObjectShortType} obj : doList){
+				${voObjectShortType} vo = transformToVo(obj);
+				voList.add(vo);
+			}
+		}
+
+		return voList;
+		</methodDiv>
+	</methodBody>
+
+	<!-- transformDoList -->
+	<methodDeclaration name="TransformToDoListMethodGenerator">
+		<returnType> List &lt; ${baseRecordType} &gt;</returnType>
+		<statementId>transformToDoList</statementId>
+		<paramType name="voList" type="java.util.List&lt; ${voObjectType} &gt;">
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="TransformToDoListMethodGenerator">
+		<methodDiv>
+		List &lt; ${domainObjectShortType} &gt; doList = new ArrayList &lt; ${domainObjectShortType} &gt; ();
+		if(voList != null){
+			for(${voObjectType} vo : voList){
+				${domainObjectShortType} obj = transformToDo(vo);
+				doList.add(obj);
+			}
+		}
+		return doList;
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="ValidateVoMethodGenerator">
+		<returnType>void</returnType>
+		<statementId>validateVO</statementId>
+		<paramType name="vo" type="${voObjectType}">
+		</paramType>
+	</methodDeclaration>
+	
+
+	<methodBody name="ValidateVoMethodGenerator">
+		<methodDiv>
+		Assert.notNull(vo, &quot;vo can't empty&quot;);
+		</methodDiv>
+	</methodBody>
+
+	<!-- validateVoList -->
+	<methodDeclaration name="ValidateVoListMethodGenrator">
+		<returnType>void</returnType>
+		<statementId>validateVoList</statementId>
+		<paramType name="voList" type="java.util.List&lt; ${voObjectType} &gt;">
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="ValidateVoListMethodGenrator">
+		<methodDiv>
+		for(${voObjectShortType} vo : voList){
+			validateVO(vo);
+		}
+		</methodDiv>
+	</methodBody>
+	
+	<!-- DTO Generator -->
+	<methodDeclaration name="FillContextMethodGenerator">
+		<returnType>void</returnType>
+		<statementId>fill</statementId>
+		<paramType name="obj" type="${baseRecordType}">
+		</paramType>
+	</methodDeclaration>
+	
+	<methodBody name="FillContextMethodGenerator">
+		<methodDiv>
+		//TODO, fill context
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="FillListContextMethodGenerator">
+		<returnType>List&lt; Long &gt;</returnType>
+		<statementId>fillList</statementId>
+		<paramType name="objList" type="List &lt; ${baseRecordType} &gt;">
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="FillListContextMethodGenerator">
+		<methodDiv>
+			List&lt; Long &gt; idList = Lists.newArrayList();
+            if(objList != null){
+            	for(${domainObjectShortType} obj : objList){
+            		this.fill(obj);
+            		idList.add(obj.getId());
+            	}
+            }
+            return idList;
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="ToPlanMethodGenerator">
+		<returnType>${planObjectType}</returnType>
+		<statementId>toPlan</statementId>
+		<paramType name="obj" type="${baseRecordType}">
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="ToPlanMethodGenerator">
+		<methodDiv>
+			${planObjectName} plan = new ${planObjectName}();
+			BeanUtils.copyProperties(obj, plan);
+            return plan;
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="ToPlanListMethodGenerator">
+		<returnType>List&lt; ${planObjectType} &gt;</returnType>
+		<statementId>toPlanList</statementId>
+		<paramType name="objList" type="List&lt; ${baseRecordType} &gt;">
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="ToPlanListMethodGenerator">
+		<methodDiv>
+		List&lt; ${planObjectName} &gt; list = Lists.newArrayList();
+		if(objList != null){
+			for(${domainObjectShortType} obj : objList){
+				${planObjectName} plan = this.toPlan(obj);
+				list.add(plan);
+			}
+		}
+		return list;
+		</methodDiv>
+	</methodBody>
+	
+	<!--  -->
+	
+	<methodDeclaration name="QueryByConditionAllMethodGenerator">
+		<returnType>List&lt; ${baseRecordType} &gt;</returnType>
+		<statementId>query${domainObjectName}AllByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryByConditionAllMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		condition.setSecretKey(this.getSecurityKey());
+		#end
+		List&lt;${domainObjectShortType}&gt; list = ${javaMapperName}.selectByCondition(condition);
+		return list;
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="CountByConditionSrvMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>count${domainObjectName}ByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="CountByConditionSrvMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		condition.setSecretKey(this.getSecurityKey());
+		#end
+		return ${javaMapperName}.countByCondition(condition);
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="DeleteByConditionMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>delete${domainObjectName}ByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="DeleteByConditionMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		condition.setSecretKey(this.getSecurityKey());
+		#end
+		return ${javaMapperName}.deleteByCondition(condition);
+		</methodDiv>
+	</methodBody>
+	
+	
+	<methodDeclaration name="QueryShortByConditionMethodGenerator">
+		<returnType>Page&lt; ${baseRecordType} &gt;</returnType>
+		<statementId>query${domainObjectName}ShortByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+		<paramType name="pageNo" type="Integer"></paramType>
+		<paramType name="pageSize" type="Integer"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryShortByConditionMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		condition.setSecretKey(this.getSecurityKey());
+		#end
+		PageHelper.startPage(pageNo, pageSize,true);
+		Page&lt;${domainObjectShortType}&gt; dtoPage = (Page&lt;${domainObjectShortType}&gt;)${javaExtMapperName}.selectShortByCondition(condition);
+		return dtoPage;
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="QueryShortByConditionAllMethodGenerator">
+		<returnType>List&lt; ${baseRecordType} &gt;</returnType>
+		<statementId>query${domainObjectName}ShortAllByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryShortByConditionAllMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		condition.setSecretKey(this.getSecurityKey());
+		#end
+		List&lt;${domainObjectShortType}&gt; list = ${javaExtMapperName}.selectShortByCondition(condition);
+		return list;
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="UpdateByConditionSrvMethodGenerator">
+		<returnType>Long</returnType>
+		<statementId>modify${domainObjectName}ByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+		<paramType name="record" type="${baseRecordType}"></paramType>
+		<paramType name="user" type="java.lang.String"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="UpdateByConditionSrvMethodGenerator">
+		<methodDiv>
+		//TODO 自行添加唯一性或存在性校验
+		setSpecailForUpdate(record, user);
+		#if(${isSecurity})
+		record.setSecretKey(this.getSecurityKey());
+		#end
+		int num = ${javaMapperName}.updateByCondition(record, condition);
+		return record.getId();
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="BatchUpdateByConditionSrvMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>batchModify${domainObjectName}ByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+		<paramType name="records" type="java.util.List&lt; ${baseRecordType} &gt;">
+		</paramType>
+		<paramType name="user" type="java.lang.String"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="BatchUpdateByConditionSrvMethodGenerator">
+		<methodDiv>
+		//TODO 自行添加唯一性或存在性校验
+		int total = 0;
+		List&lt; List&lt; ${domainObjectName}&gt; &gt; subList = splitList(records);
+		for(List&lt;${domainObjectName} &gt; sub : subList){
+			for(${domainObjectName} obj : sub){
+				setSpecailForUpdate(obj, user);
+				#if(${isSecurity})
+				obj.setSecretKey(this.getSecurityKey());
+				#end
+			}
+			int num = ${javaMapperName}.batchUpdateByCondition(sub, condition);
+			total += num;
+		}
+		return total;
+		</methodDiv>
+	</methodBody>
+	
+	<!-- Facade -->
+	
+	<methodDeclaration name="FacadeCreateMethodGenerator">
+		<returnType>Long</returnType>
+		<statementId>create</statementId>
+		<paramType name="obj" type="${baseRecordType}" />
+		<paramType name="context" type="EventContext" />
+	</methodDeclaration>
+
+	<methodBody name="FacadeCreateMethodGenerator">
+		<methodDiv>
+		return transactionTemplate.execute(status -> {
+			int num = 0;
+			
+			${tableObj.shortName}Adapter.fill(obj, context);
+			num = this.${tableObj.className}Service.insert${tableObj.className}(obj, context.getOperatorWorkNo());
+			
+			${tableObj.className}Plan plan = ${tableObj.shortName}Adapter.toPlan(obj);
+			num = this.${tableObj.className}PlanService.insert${tableObj.className}Plan(plan, context.getOperatorWorkNo());
+			
+			return obj.getId();
+		});
+		</methodDiv>
+	</methodBody>
+	
+	
+	<methodDeclaration name="FacadeModifyMethodGenerator">
+		<returnType>Long</returnType>
+		<statementId>modify</statementId>
+		<paramType name="obj" type="${baseRecordType}" />
+		<paramType name="context" type="EventContext" />
+	</methodDeclaration>
+
+	<methodBody name="FacadeModifyMethodGenerator">
+		<methodDiv>
+		return transactionTemplate.execute(status -> {
+			int num = 0;
+			
+			${tableObj.shortName}Adapter.fill(obj, context);
+			num = this.${tableObj.className}Service.modify${tableObj.className}(obj, context.getOperatorWorkNo());
+			
+			${tableObj.className}Plan plan = ${tableObj.shortName}Adapter.toPlan(obj);
+			num = this.${tableObj.className}PlanService.insert${tableObj.className}Plan(plan, context.getOperatorWorkNo());
+			
+			return obj.getId();
+		});
+		</methodDiv>
+	</methodBody>
+	
+	
+	<methodDeclaration name="FacadeDeleteMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>delete</statementId>
+		<paramType name="obj" type="${baseRecordType}" />
+		<paramType name="context" type="EventContext" />
+	</methodDeclaration>
+
+	<methodBody name="FacadeDeleteMethodGenerator">
+		<methodDiv>
+		//TODO
+		</methodDiv>
+	</methodBody>
+	
+	
+	<methodDeclaration name="FacadeBatchCreateMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>batchCreate</statementId>
+		<paramType name="objList" type="List&lt; ${baseRecordType} &gt;" />
+		<paramType name="context" type="EventContext" />
+	</methodDeclaration>
+
+	<methodBody name="FacadeBatchCreateMethodGenerator">
+		<methodDiv>
+		//TODO
+		</methodDiv>
+	</methodBody>
+	
+	
+	<methodDeclaration name="FacadeBatchModifyMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>batchModify</statementId>
+		<paramType name="objList" type="List&lt; ${baseRecordType} &gt;" />
+		<paramType name="context" type="EventContext" />
+	</methodDeclaration>
+
+	<methodBody name="FacadeBatchModifyMethodGenerator">
+		<methodDiv>
+		//TODO
+		</methodDiv>
+	</methodBody>
+	
+	
+	<methodDeclaration name="FacadeBatchDeleteMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>batchDelete</statementId>
+		<paramType name="objList" type="List&lt; ${baseRecordType} &gt;" />
+		<paramType name="context" type="EventContext" />
+	</methodDeclaration>
+
+	<methodBody name="FacadeBatchDeleteMethodGenerator">
+		<methodDiv>
+		//TODO
+		</methodDiv>
+	</methodBody>
+	
+	
+	<methodDeclaration name="FacadeModifyByConditionMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>modifyByCondtion</statementId>
+		<paramType name="param" type="${paramObjectType}" />
+		<paramType name="condition" type="${conditionObjectType}" />
+		<paramType name="context" type="EventContext" />
+	</methodDeclaration>
+
+	<methodBody name="FacadeModifyByConditionMethodGenerator">
+		<methodDiv>
+		//TODO
+		</methodDiv>
+	</methodBody>
+	
+	
+	<methodDeclaration name="FacadeDeleteByConditionMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>deleteByCondtion</statementId>
+		<paramType name="condition" type="${conditionObjectType}" />
+		<paramType name="context" type="EventContext" />
+	</methodDeclaration>
+
+	<methodBody name="FacadeDeleteByConditionMethodGenerator">
+		<methodDiv>
+		//TODO
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="DeleteAllMethodGenerator">
+		<returnType>int</returnType>
+		<statementId>deleteAll</statementId>
+	</methodDeclaration>
+
+	<methodBody name="DeleteAllMethodGenerator">
+		<methodDiv>
+			${conditionObjectShortType} condition = new ${conditionObjectShortType}();
+			return ${javaMapperName}.deleteByCondition(condition);
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="QueryMapByConditionMethodGenerator">
+		<returnType>Map&lt; String, ${baseRecordType} &gt;</returnType>
+		<statementId>queryMapByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryMapByConditionMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		condition.setSecretKey(this.getSecurityKey());
+		#end
+		
+		List&lt;${domainObjectShortType}&gt; dtoList = ${javaMapperName}.selectByCondition(condition);
+		Map&lt;String,${domainObjectShortType}&gt; rtMap = new LinkedHashMap&lt;String,${domainObjectShortType}&gt;();
+		if(dtoList != null){
+			for(${domainObjectShortType} dto : dtoList){
+				rtMap.put(xxx, dto);
+			}
+		}
+		return rtMap;
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="QueryKVMapByConditionMethodGenerator">
+		<returnType>Map&lt; String, String &gt;</returnType>
+		<statementId>queryKVMapByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryKVMapByConditionMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		condition.setSecretKey(this.getSecurityKey());
+		#end
+		
+		List&lt;${domainObjectShortType}&gt; dtoList = ${javaMapperName}.selectByCondition(condition);
+		Map&lt;String,String&gt; rtMap = new LinkedHashMap&lt;String,String&gt;();
+		if(dtoList != null){
+			for(${domainObjectShortType} dto : dtoList){
+				rtMap.put(xxx, yyy);
+			}
+		}
+		return rtMap;
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="QueryKVMapByConditionMethodGeneratorRPC">
+		<returnType>Object</returnType>
+		<statementId>queryKVMapByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}">
+			<annotation>
+				@JsonParam(value = &quot;condition&quot;)
+			</annotation>
+		</paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryKVMapByConditionMethodGeneratorRPC">
+		<methodDiv>
+			return this.${serviceInterfaceName}.queryKVMapByCondition(condition);
+		</methodDiv>
+	</methodBody>
+	
+	<methodDeclaration name="QueryCodeListByConditionMethodGenerator">
+		<returnType>List&lt;String&gt;</returnType>
+		<statementId>queryCodeListByCondition</statementId>
+		<paramType name="condition" type="${conditionObjectType}"></paramType>
+	</methodDeclaration>
+
+	<methodBody name="QueryCodeListByConditionMethodGenerator">
+		<methodDiv>
+		#if(${isSecurity})
+		condition.setSecretKey(this.getSecurityKey());
+		#end
+		
+		List&lt;${domainObjectShortType}&gt; dtoList = ${javaMapperName}.selectByCondition(condition);
+		List&lt;String&gt; rtList = new ArrayList&lt;String&gt;();
+		if(dtoList != null){
+			for(${domainObjectShortType} dto : dtoList){
+				rtList.add(xxx);
+			}
+		}
+		return rtList;
+		</methodDiv>
+	</methodBody>
+	
+	
+	<!--  -->
+
+</methodFactory>

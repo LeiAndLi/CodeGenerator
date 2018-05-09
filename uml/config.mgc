@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="org.mybatis.generator.config.TableConfiguration" x="44" y="150">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="org.mybatis.generator.config.Context"/>
+    </Class>
+    <Class name="org.mybatis.generator.config.Configuration" x="40" y="27">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="org.mybatis.generator.config.Context"
+            endpointName="contexts" kind="Simple"/>
+        <Communication destinationClassName="org.mybatis.generator.config.Context"/>
+    </Class>
+    <Class name="org.mybatis.generator.config.Context" x="426" y="21">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="org.mybatis.generator.config.TableConfiguration"
+            endpointName="tableConfigurations" kind="Simple"/>
+        <Communication destinationClassName="org.mybatis.generator.config.TableConfiguration"/>
+    </Class>
+</ClassDiagram>

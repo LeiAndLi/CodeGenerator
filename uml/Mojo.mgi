@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <CommunicationClass
+        name="org.mybatis.generator.config.TableConfiguration" x="317" y="411">
+        <Communication destinationClassName="org.mybatis.generator.config.Context">
+            <Point x="343" y="360"/>
+        </Communication>
+    </CommunicationClass>
+    <CommunicationClass
+        name="org.mybatis.generator.config.Configuration" x="328" y="99">
+        <Association
+            destinationClassName="org.mybatis.generator.config.Context"
+            endpointName="contexts" kind="Simple"/>
+        <Communication destinationClassName="org.mybatis.generator.config.Context"/>
+    </CommunicationClass>
+    <CommunicationClass
+        name="org.mybatis.generator.internal.db.DatabaseIntrospector"
+        x="560" y="544">
+        <Association
+            destinationClassName="org.mybatis.generator.config.Context"
+            endpointName="context" kind="Simple"/>
+        <Communication destinationClassName="org.mybatis.generator.config.TableConfiguration"/>
+        <Communication destinationClassName="org.mybatis.generator.config.Context">
+            <Point x="490" y="336"/>
+        </Communication>
+    </CommunicationClass>
+    <CommunicationClass
+        name="org.mybatis.generator.config.xml.ConfigurationParser"
+        x="204" y="39">
+        <Communication destinationClassName="org.mybatis.generator.config.xml.MyBatisGeneratorConfigurationParser"/>
+    </CommunicationClass>
+    <CommunicationClass
+        name="org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl"
+        x="665" y="123">
+        <Communication destinationClassName="org.mybatis.generator.config.Context"/>
+    </CommunicationClass>
+    <CommunicationClass
+        name="org.mybatis.generator.api.MyBatisGenerator" x="577" y="9">
+        <Association
+            destinationClassName="org.mybatis.generator.config.Configuration"
+            endpointName="configuration" kind="Simple"/>
+        <Communication destinationClassName="org.mybatis.generator.config.Configuration"/>
+        <Communication destinationClassName="org.mybatis.generator.config.Context">
+            <Point x="566" y="113"/>
+        </Communication>
+    </CommunicationClass>
+    <CommunicationClass
+        name="org.mybatis.generator.maven.MyBatisGeneratorMojo" x="376" y="8">
+        <Communication destinationClassName="org.mybatis.generator.config.xml.ConfigurationParser"/>
+        <Communication destinationClassName="org.mybatis.generator.api.MyBatisGenerator"/>
+    </CommunicationClass>
+    <CommunicationClass name="org.mybatis.generator.config.Context"
+        x="377" y="175">
+        <Association
+            destinationClassName="org.mybatis.generator.config.TableConfiguration"
+            endpointName="tableConfigurations" kind="Simple"/>
+        <Communication destinationClassName="org.mybatis.generator.config.TableConfiguration"/>
+        <Communication destinationClassName="org.mybatis.generator.internal.db.DatabaseIntrospector">
+            <Point x="585" y="337"/>
+        </Communication>
+    </CommunicationClass>
+    <CommunicationClass
+        name="org.mybatis.generator.config.xml.MyBatisGeneratorConfigurationParser"
+        x="22" y="127">
+        <Communication destinationClassName="org.mybatis.generator.config.TableConfiguration">
+            <Point x="138" y="365"/>
+        </Communication>
+        <Communication destinationClassName="org.mybatis.generator.config.Configuration"/>
+        <Communication destinationClassName="org.mybatis.generator.config.Context">
+            <Point x="250" y="220"/>
+        </Communication>
+    </CommunicationClass>
+</ClassDiagram>

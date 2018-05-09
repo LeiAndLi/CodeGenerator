@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator"
+        x="95" y="477">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractJavaClientGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.mybatis3.javamapper.elements.AbstractJavaMapperMethodGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.javamapper.MixedClientGenerator"
+        x="42" y="607">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.AbstractJavaClientGenerator"
+        x="93" y="368">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.javamapper.elements.CountByExampleMethodGenerator"
+        x="-147" y="337">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.mybatis3.javamapper.elements.AbstractJavaMapperMethodGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator"
+        x="502" y="421">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.javamapper.AnnotatedClientGenerator"
+        x="27" y="547">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.mybatis3.javamapper.SqlProviderGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator"
+        x="793" y="489">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractXmlGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.javamapper.SqlProviderGenerator"
+        x="330" y="374">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.javamapper.SimpleAnnotatedClientGenerator"
+        x="228" y="574">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.mybatis3.javamapper.SimpleJavaClientGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.mybatis3.javamapper.SimpleJavaClientGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.javamapper.elements.AbstractJavaMapperMethodGenerator"
+        x="-132" y="266">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.model.BaseRecordGenerator"
+        x="480" y="371">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.model.PrimaryKeyGenerator"
+        x="528" y="479">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl"
+        x="354" y="71">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="org.mybatis.generator.codegen.AbstractXmlGenerator"
+            endpointName="xmlMapperGenerator" kind="Simple"/>
+        <Association
+            destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"
+            endpointName="clientGenerators" kind="Simple"/>
+        <Association
+            destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"
+            endpointName="javaModelGenerators" kind="Simple">
+            <Point x="383" y="281"/>
+        </Association>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractJavaClientGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractXmlGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator"
+        x="524" y="535">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.xmlmapper.SimpleXMLMapperGenerator"
+        x="795" y="425">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractXmlGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractGenerator"/>
+    </Class>
+    <Class name="org.mybatis.generator.codegen.AbstractGenerator"
+        x="139" y="71">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.javamapper.SimpleJavaClientGenerator"
+        x="189" y="523">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractJavaClientGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.mybatis3.javamapper.elements.AbstractJavaMapperMethodGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.model.SimpleModelGenerator"
+        x="609" y="613">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+        <Communication destinationClassName="org.mybatis.generator.codegen.AbstractJavaGenerator"/>
+    </Class>
+    <Class name="org.mybatis.generator.codegen.AbstractJavaGenerator"
+        x="108" y="262">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractGenerator"/>
+    </Class>
+    <Class
+        name="org.mybatis.generator.codegen.mybatis3.xmlmapper.MixedMapperGenerator"
+        x="764" y="369">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator"/>
+    </Class>
+    <Class name="org.mybatis.generator.codegen.AbstractXmlGenerator"
+        x="744" y="281">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="org.mybatis.generator.codegen.AbstractGenerator"/>
+    </Class>
+</ClassDiagram>
